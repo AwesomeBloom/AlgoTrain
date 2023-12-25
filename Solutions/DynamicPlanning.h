@@ -160,6 +160,196 @@ namespace dynamic_planning {
             if (dp[sum / 2] == sum / 2) result = true;
             return result;
         }
+
+        /**
+         * @problem: LC 1049: last stone weight
+         * @site: https://leetcode.cn/problems/last-stone-weight-ii/description/
+         * @methods: dp;
+         * **/
+        int lastStoneWeightII(vector<int>& stones) {
+            int sum = 0, len = stones.size();
+            for (auto st: stones) sum += st;
+            int target = sum >> 1;
+            vector<int> dp(target + 1, 0);
+
+            for (int i = 0; i < len; ++i) {
+                for (int j = target; j >= stones[i]; --j) {
+                    dp[j] = max(dp[j], dp[j - stones[i]] + stones[i]);
+                }
+            }
+            return (sum - dp[target]) - dp[target];
+        }
+
+        /**
+         * @problem: LC 494: target sum
+         * @site: https://leetcode.cn/problems/target-sum/description/
+         * @methods: dp;
+         * **/
+        int findTargetSumWays(vector<int>& nums, int target) {
+            int len = nums.size(), sum = 0;
+            for (auto num: nums) sum += num;
+
+            if (abs(target) > sum) return 0;
+            if ((target + sum) % 2 == 1) return 0;
+
+            int bpSize = (target + sum) >> 1;
+            vector<int> dp(bpSize + 1, 0);
+
+            for(int i = 0; i < len; ++i) {
+                for (int j = bpSize; j >= nums[i]; --j) {
+                    dp[j] += dp[j - nums[i]];
+                }
+            }
+            return dp[bpSize];
+        }
+
+        /**
+         * @problem: LC 474: 1 & 0
+         * @site: https://leetcode.cn/problems/ones-and-zeroes/
+         * @methods: dp;
+         * **/
+        int findMaxForm(vector<string>& strs, int m, int n) {
+            auto cnt = [](const string& str)->pair<int, int> {
+                int _0 = 0, _1 = 0;
+                for (auto ch: str) {
+                    if (ch == '0') _0++;
+                    else if (ch == '1') _1++;
+                }
+                return {_0, _1};
+            };
+
+            vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+
+            int len = strs.size();
+            for (int i = 0; i < len; ++i) {
+                auto numCnt = cnt(strs[i]);
+                auto cntZero = numCnt.first, cntOne = numCnt.second;
+                for (int x = m; x >= cntZero; --x) {
+                    for (int y = n; y >= cntOne; --y) {
+                        dp[x][y] = max(dp[x][y], dp[x - cntZero][y - cntOne] + 1);
+                    }
+                }
+            }
+            return dp[m][n];
+        }
+
+        /**
+         * @problem: LC 518: exchange coins
+         * @site: https://leetcode.cn/problems/ones-and-zeroes/
+         * @methods: dp;
+         * **/
+        int change(int amount, vector<int>& coins) {
+            vector<int> dp(amount + 1, 0);
+            dp[0] = 1;
+            for (int coin: coins) {
+                for (int j = coin; j <= amount; ++j) {
+                    dp[j] += dp[j - coin];
+                }
+            }
+
+            return dp[amount];
+        }
+
+        /**
+        * @problem: LC 377: combination IV
+        * @site: https://leetcode.cn/problems/combination-sum-iv/description/
+        * @methods: dp; full backpack;
+        * **/
+        int combinationSum4(vector<int>& nums, int target) {
+            vector<int> dp(target + 1, 0);
+            dp[0] = 1;
+
+            int len = nums.size();
+            for (int j = 0; j <= target; ++j) {
+                for (int i = 0; i < len; ++i) {
+                    if (j >= nums[i] && dp[j] < INT_MAX - dp[j - nums[i]]) {
+                        dp[j] += dp[j - nums[i]];
+                    }
+                }
+            }
+
+            return dp[target];
+        }
+
+        /**
+        * @problem: KC 57: stairs
+        * @site: https://kamacoder.com/problempage.php?pid=1067
+        * @methods: dp; full backpack;
+        * **/
+        int climbStairsII(int n, int m) {
+            std::vector<int> dp(n + 1, 0);
+            dp[0] = 1;
+
+            for (int i = 1; i <= n; ++i) {
+                for (int j = 1; j <= m; ++j) {
+                    if (i >= j) {
+                        dp[i] += dp[i - j];
+                    }
+                }
+            }
+            return dp[n];
+        }
+
+        /**
+        * @problem: LC 322: exchange coins
+        * @site: https://leetcode.cn/problems/coin-change/description/
+        * @methods: dp; full backpack;
+        * **/
+        int coinChange(vector<int>& coins, int amount) {
+            vector<int> dp(amount + 1, INT_MAX);
+            dp[0] = 0;
+            for (int coin : coins) {
+                for (int j = coin; j <= amount; ++j) {
+                    if (dp[j - coin] != INT_MAX) {
+                        dp[j] = min(dp[j], dp[j - coin] + 1);
+                    }
+                }
+            }
+            if (dp[amount] == INT_MAX) return -1;
+            return dp[amount];
+        }
+
+        /**
+        * @problem: LC 279: perfect squares
+        * @site: https://leetcode.cn/problems/perfect-squares/
+        * @methods: dp; full backpack;
+        * **/
+        int numSquares(int n) {
+            vector<int> dp(n + 1, INT_MAX);
+            dp[0] = 0;
+
+            int target = sqrt(n);
+            for (int i = 1; i <= target; ++i) {
+                for (int j = 1; j <= n; ++j) {
+                    if (j >= i * i) {
+                        dp[j] = min(dp[j], dp[j - i * i] + 1);
+                    }
+                }
+            }
+
+            return dp[n];
+        }
+
+        /**
+        * @problem: LC 139: word break
+        * @site: https://leetcode.cn/problems/word-break/
+        * @methods: dp; full backpack;
+        * **/
+        bool wordBreak(string s, vector<string>& wordDict) {
+            unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+            int len = s.size();
+            vector<bool> dp(len + 1, false);
+            dp[0] = true;
+            for (int i = 1; i <= len; ++i) {
+                for (int j = 0; j < i; ++j) {
+                    string word = s.substr(j, i - j);
+                    if (wordSet.find(word) != wordSet.end() && dp[j]) {
+                        dp[i] = true;
+                    }
+                }
+            }
+            return dp[len];
+        }
     };
 }
 

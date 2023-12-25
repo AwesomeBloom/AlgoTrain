@@ -9,6 +9,7 @@
 #include "Solutions/DoublePointerCollection.h"
 #include "Solutions/BinaryTree.h"
 #include "Solutions/BackTracking.h"
+#include "Solutions/DynamicPlanning.h"
 
 int main() {
     auto perform_array_operations = []() {
@@ -45,17 +46,21 @@ int main() {
         cout << s.reverseWords(inputStr) << endl;
     };
 
-    using backtracking::Solution;
+//    using backtracking::Solution;
+//    Solution s;
+//    vector<vector<string>> vec = {{"MUC", "LHR"},
+//                                  {"JFK", "MUC"},
+//                                  {"SFO", "SJC"},
+//                                  {"LHR", "SFO"}};
+//    auto vec1 = s.findItinerary(vec);
+//    for (auto i: vec1) {
+//        std::cout << i << " ";
+//    }
+//    std::cout << std::endl;
+
+    using dynamic_planning::Solution;
     Solution s;
-    vector<vector<string>> vec = {{"MUC", "LHR"},
-                                  {"JFK", "MUC"},
-                                  {"SFO", "SJC"},
-                                  {"LHR", "SFO"}};
-    auto vec1 = s.findItinerary(vec);
-    for (auto i: vec1) {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
+    s.numSquares(12);
 
     return 0;
 }
