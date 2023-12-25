@@ -1,3 +1,0 @@
-/root/Algo/cmake-build-debug/CMakeFiles/Algo.dir
-/root/Algo/cmake-build-debug/CMakeFiles/edit_cache.dir
-/root/Algo/cmake-build-debug/CMakeFiles/rebuild_cache.dir
