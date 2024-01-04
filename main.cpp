@@ -60,7 +60,7 @@ int main() {
 
     using dynamic_planning::Solution;
     Solution s;
-    s.numSquares(12);
+    s.findLengthOfLCIS({1,3,5,4,7});
 
     return 0;
 }
